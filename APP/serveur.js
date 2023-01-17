@@ -1,9 +1,9 @@
 const fs = require('fs');
 const tls = require('tls');
+const bcrypt = require('bcrypt');
 
 let BD_Users = JSON.parse(fs.readFileSync("DB.json"));
 let globalSocket;
-//console.log(BD_Users);
 
 const options = {
     requestCert: true, // ask for a client cert
@@ -24,16 +24,13 @@ server.listen(8000, () => {
   console.log('server bound');
 });
 
-function onConnData(d) {
-    console.log(d.toString());
-
+async function onConnData(d) {
     let user = JSON.parse(d.toString());
-
     console.log(user);
 
     let foundUser = BD_Users.users.find(u => u.name == user.name)
 
-    if(foundUser?.ps == user.password)
+    if(await bcrypt.compare(foundUser?.ps, user.encryptedPw))
     {
       globalSocket.write("Connecté")
     }

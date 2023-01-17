@@ -1,5 +1,6 @@
 const tls = require('tls');
 const fs = require('fs');
+const bcrypt = require('bcrypt');
 
 const options = {
   ca: [fs.readFileSync('../autorite/autorite.cer')],
@@ -8,11 +9,11 @@ const options = {
   servername: 'localhost',
 };
 
-const client = tls.connect(8000, options, () => {
+const client = tls.connect(8000, options, async () => {
   console.log('client connected', client.authorized ? 'authorized' : 'unauthorized');
-  //client.write('hello\n');
 
-  const user = { name: "jplemay", password: "123456"};
+  const pw = await bcrypt.hash("123456", 10);
+  const user = { name: "jplemay", encryptedPw: pw};
 
   client.write(JSON.stringify(user));
 });
