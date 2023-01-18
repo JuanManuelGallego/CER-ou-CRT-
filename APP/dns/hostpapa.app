@@ -1,11 +1,11 @@
 ;
-; Zone file for hostpapa.com
+; Zone file for hostpapa.app
 ;
 ; The full zone file
 ;
 $TTL 1D
 @       IN      SOA     ns.hostpapa.app. master.hostpapa.app. (
-                        200608081       ; serial, todays date + todays serial # 
+                        202301181       ; serial, todays date + todays serial # 
                         8H              ; refresh, seconds
                         2H              ; retry, seconds
                         4W              ; expire, seconds
