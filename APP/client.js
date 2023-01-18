@@ -1,6 +1,8 @@
 const tls = require('tls');
 const fs = require('fs');
 const bcrypt = require('bcrypt');
+const prompt = require("prompt-sync")({ sigint: true });
+
 
 const options = {
   ca: [fs.readFileSync('../autorite/autorite.cer')],
@@ -11,14 +13,11 @@ const options = {
 
 const client = tls.connect(8000, options, async () => {
   console.log('client connected', client.authorized ? 'authorized' : 'unauthorized');
-
-  const pw = await bcrypt.hash("123456", 10);
-  const user = { name: "jplemay", encryptedPw: pw};
-
-  client.write(JSON.stringify(user));
+  login();
 });
 
 client.setEncoding('utf8');
+
 client.on('data', (data) => {
   console.log(data);
 });
@@ -26,3 +25,12 @@ client.on('data', (data) => {
 client.on('end', () => {
   console.log('client disconnected');
 });
+
+async function login() {
+  console.log("***** Connexion *****");
+  const username = prompt("Nom d'utilisateur : ");
+  const pw = prompt.hide("Mot de passe : ");
+  const user = { name: username, encryptedPw: await bcrypt.hash(pw, 10) };
+
+  client.write(JSON.stringify(user));
+};
