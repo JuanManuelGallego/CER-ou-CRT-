@@ -8,8 +8,9 @@ let globalSocket;
 const options = {
     requestCert: true, // ask for a client cert
     ca: [fs.readFileSync('../../../autorite/autorite.cer')],
-    key: fs.readFileSync('../../cert/server/clef_privee_serveur_decrypted.key'),
-    cert: fs.readFileSync('../../../certificats/1001.pem')
+    key: fs.readFileSync('../../cert/server/clef_privee_server_decrypted.key'),
+    cert: fs.readFileSync('../../../certificats/1001.pem'),
+    ciphers: "TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384",
 };
 
 const server = tls.createServer(options, (socket) => {

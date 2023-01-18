@@ -1,0 +1,6 @@
+openssl req -newkey rsa:2048 -config gei761.conf -out client.cer
+openssl ca -config gei761.conf -in server.cer
+openssl rsa -in clef_privee_client -out dec.key
+
+docker cp hostpapa.app bind9:/etc/bind
+docker cp named.conf.local bind9:/etc/bind
