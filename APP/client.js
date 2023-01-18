@@ -7,19 +7,20 @@ const prompt = require("prompt-sync")({ sigint: true });
 const options = {
   ca: [fs.readFileSync('../autorite/autorite.cer')],
   key: fs.readFileSync('clef_privee_client_decrypted.key'),
-  cert: fs.readFileSync('../certificats/1000.pem'),
-  servername: 'localhost',
+  cert: fs.readFileSync('../certificats/1000.pem')
 };
 
-const client = tls.connect(8000, options, async () => {
-  console.log('client connected', client.authorized ? 'authorized' : 'unauthorized');
-  login();
+const client = tls.connect(8000, options, () => {
+  console.log('connected', client.authorized ? 'authorized' : 'unauthorized');
 });
 
 client.setEncoding('utf8');
 
 client.on('data', (data) => {
   console.log(data);
+  if(data.includes('welcome')) {
+    login();
+  }
 });
 
 client.on('end', () => {
