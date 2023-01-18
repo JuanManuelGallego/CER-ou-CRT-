@@ -1,7 +1,18 @@
 const tls = require('tls');
 const fs = require('fs');
 const prompt = require("prompt-sync")({ sigint: true });
+const { Resolver } = require('node:dns');
 
+const hostname = 'www.hostpapa.app';
+const resolver = new Resolver();
+resolver.setServers(['127.0.0.1']);
+
+let address;
+
+resolver.resolve4(hostname, (err, addresses) => {
+    console.log(`addresses: ${JSON.stringify(addresses)}`);
+    address = addresses[0];
+  });
 
 const options = {
   ca: [fs.readFileSync('../autorite/autorite.cer')],
@@ -9,7 +20,7 @@ const options = {
   cert: fs.readFileSync('../certificats/1000.pem')
 };
 
-const client = tls.connect(8000, options, () => {
+const client = tls.connect(8000, address, options, () => {
   console.log('connected', client.authorized ? 'authorized' : 'unauthorized');
 });
 
