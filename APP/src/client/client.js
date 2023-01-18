@@ -15,9 +15,9 @@ resolver.resolve4(hostname, (err, addresses) => {
   });
 
 const options = {
-  ca: [fs.readFileSync('../autorite/autorite.cer')],
-  key: fs.readFileSync('clef_privee_client_decrypted.key'),
-  cert: fs.readFileSync('../certificats/1000.pem')
+  ca: [fs.readFileSync('../../../autorite/autorite.cer')],
+  key: fs.readFileSync('../../cert/client/clef_privee_client_decrypted.key'),
+  cert: fs.readFileSync('../../../certificats/1000.pem')
 };
 
 const client = tls.connect(8000, address, options, () => {
