@@ -1,0 +1,6 @@
+zone "hostpapa.app" {
+    type primary;
+    file "/etc/bind/hostpapa.app";
+    dnssec-policy default;
+    inline-signing yes;
+};
