@@ -30,12 +30,13 @@ async function onConnData(d) {
 
     let foundUser = BD_Users.users.find(u => u.name == user.name)
 
-    if(await bcrypt.compare(foundUser?.ps, user.encryptedPw))
+    if(!foundUser) {
+      globalSocket.write("Mauvais usager")
+    } else if(await bcrypt.compare(foundUser?.ps, user.encryptedPw))
     {
       globalSocket.write("Connecté")
-    }
-    else
+    } else
     {
-      globalSocket.write("Mauvais mot de passe ou usager")
+      globalSocket.write("Mauvais mot de passe")
     }
 } 
