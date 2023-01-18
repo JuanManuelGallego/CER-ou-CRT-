@@ -36,7 +36,7 @@ async function onConnData(d) {
 
     if(!foundUser) {
       globalSocket.write("Mauvais usager")
-    } else if(await bcrypt.compare(foundUser?.ps, user.encryptedPw)) {
+    } else if(await bcrypt.compare(user.pw, foundUser?.ps)) {
       globalSocket.write("Connecté")
     } else {
       globalSocket.write("Mauvais mot de passe")

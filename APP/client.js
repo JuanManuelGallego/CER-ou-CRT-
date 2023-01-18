@@ -1,6 +1,5 @@
 const tls = require('tls');
 const fs = require('fs');
-const bcrypt = require('bcrypt');
 const prompt = require("prompt-sync")({ sigint: true });
 
 
@@ -27,11 +26,11 @@ client.on('end', () => {
   console.log('client disconnected');
 });
 
-async function login() {
+function login() {
   console.log("***** Connexion *****");
   const username = prompt("Nom d'utilisateur : ");
   const pw = prompt.hide("Mot de passe : ");
-  const user = { name: username, encryptedPw: await bcrypt.hash(pw, 10) };
+  const user = { name: username, pw: pw };
 
   client.write(JSON.stringify(user));
 };
