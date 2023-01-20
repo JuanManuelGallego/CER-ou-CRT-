@@ -1,6 +1,7 @@
 const fs = require('fs');
 const tls = require('tls');
 const bcrypt = require('bcrypt');
+var sanitizer = require('sanitize')();
 
 let BD_Users = JSON.parse(fs.readFileSync("DB.json"));
 let globalSocket;
@@ -10,7 +11,7 @@ const options = {
     ca: [fs.readFileSync('../../../autorite/autorite.cer')],
     key: fs.readFileSync('../../cert/server/clef_privee_server_decrypted.key'),
     cert: fs.readFileSync('../../../certificats/1001.pem'),
-    ciphers: "TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384",
+    ciphers: "TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384:TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384"
 };
 
 const server = tls.createServer(options, (socket) => {
@@ -30,8 +31,7 @@ server.listen(8000, () => {
 });
 
 async function onConnData(d) {
-    let user = JSON.parse(d.toString());
-    console.log(user);
+    let user = sanitizer.primitives(JSON.parse(d.toString()));
 
     let foundUser = BD_Users.users.find(u => u.name == user.name)
 
