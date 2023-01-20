@@ -6,10 +6,10 @@ const options = {
   ca: [fs.readFileSync('../../../autorite/autorite.cer')],
   key: fs.readFileSync('../../cert/client/clef_privee_client_decrypted.key'),
   cert: fs.readFileSync('../../../certificats/1000.pem'),
-  ciphers: "HIGH",
+  ciphers: "HIGH", // only send ciphers considerd High
 };
 
-const client = tls.connect(8000, 'www.hostpapa.app', options, () => {
+const client = tls.connect(8000, 'www.hostpapa.app', options, () => { // www.hostpapa.app is the domain configured in our dns zone
   console.log('connected', client.authorized ? 'authorized' : 'unauthorized');
 });
 
@@ -18,7 +18,7 @@ client.setEncoding('utf8');
 client.on('data', (data) => {
   console.log(data);
   if(data.includes('welcome')) {
-    login();
+    login(); // login when receive welcome message from the server
   }
 });
 
@@ -32,5 +32,5 @@ function login() {
   const pw = prompt.hide("Mot de passe : ");
   const user = { name: username, pw: pw };
 
-  client.write(JSON.stringify(user));
+  client.write(JSON.stringify(user)); // send data to server
 };
